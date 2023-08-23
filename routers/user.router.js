@@ -1,6 +1,5 @@
 const express = require('express');
 const {createUser, loginUser, userverification, resendotp} = require('../controllers/user.controller');
-const { createOtp } = require('../helper/otpHelper');
 const { genOtp } = require('../services/otpService');
 
 let router =  express.Router()
