@@ -7,7 +7,7 @@ let router = express.Router();
 
 router.post("/addstudent",addStudent)
 router.get("/getsinglestudent/:sid",auth,getSingleStudent)
-router.get("/getallstudent",auth,getallStudent)
+router.get("/getallstudent",getallStudent)
 router.put("/updatestudent/:sid",auth,updateStudent)
 router.delete("/deletestudent/:sid",auth,deleteStudent)
 

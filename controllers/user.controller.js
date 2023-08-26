@@ -8,7 +8,7 @@ let createUser = async (req, res, next) => {
 
     let isUserAvaliable = await User.findOne({ email });
 
-    // ! if({}) ==> always return true
+    // ! if({}) ==> always return true and if(undefined) is false.
     if (isUserAvaliable) {
       return res.status(500).json({
           error: true,

@@ -78,10 +78,45 @@ let getSingleStudent = async (req,res,next)=>{
 let getallStudent = async (req,res,next)=>{
 
     try{
-        // ! writing a query to find all the documnets in the collection
-    let allStudent =  await Student.find();
-    res.status(302).json({error:false,
-        user:{name: req.user.name},message:"Student data found",data:allStudent })
+        let {name,gender,sort,fields,page,limit} =req.query;
+        let queryObject = {};
+        if(name){
+            queryObject.name=name;
+            // queryObject.name = {$regex:name,$options:"i"}
+        }
+        if(gender){
+            queryObject.gedner=gender;
+        }
+
+        // ! writing a query to find all the documnets in the collection and don't use await keyword bcz it waits till it gets response ans allows others line to execute.
+    let allStudent =   Student.find(queryObject)
+
+    if(sort){
+        allStudent = allStudent.sort(sort)
+    }else{
+        allStudent = allStudent.sort("createdAt")
+    }
+
+    if(fields){
+        let splitFields = fields.split(",").join(" ")
+        allStudent = allStudent.select(splitFields+" -_id")
+    }
+
+    if(!page && !limit){
+        allStudent = await allStudent;
+        return res.status(302).json({error:false,count:allStudent.length,
+            message:"Student data found",data:allStudent })
+    }
+    // ! Pagination Start
+        let newPage = page || 1;
+        let newLimit = limit || 4
+        // let newSkip = (newPage-1)*4
+        let newSkip = (newPage-1)*newLimit
+    // ! Pagination ends
+
+    allStudent = await allStudent.skip(newSkip).limit(newLimit);
+    res.status(302).json({error:false,count:allStudent.length,
+        message:"Student data found",data:allStudent })
     }
     catch(err){
         next(err)
@@ -101,8 +136,6 @@ let updateStudent = async (req,res,next)=>{
 
             return res.status(404).json({error:true,message:`Student not found for given ${sid}`,data:null})
         }
-        
-        
 
         let updatedStudent = await Student.findOneAndUpdate({_id:sid},{name,age,gender,email,runValidators:true});
 

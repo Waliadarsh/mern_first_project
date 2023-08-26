@@ -79,8 +79,21 @@ let getAllTeacher = async (req,res,next)=>{
     }
 }
 
+let resentPassword = async (req,res,next)=>{
+
+    let {email} = req.body;
+
+    let isTeacherAvailable = await Teacher.findOne({ email })
+
+    if (!isTeacherAvailable) {
+        return res.status(404).json({ error: true, message: "No teacher found at given email" })
+    }
+
+    next()
+}
 module.exports = {
     registerTeacher,
     loginTeacher,
-    getAllTeacher
+    getAllTeacher,
+    resentPassword
 }
