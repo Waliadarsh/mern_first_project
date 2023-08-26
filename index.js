@@ -10,14 +10,18 @@ const teacherRouter = require('./routers/teacher.router');
 
 // ! Improting User Router
 const userRouter =require('./routers/user.router');
-// *********************************************************
 
+// ! Importing Alumini Router
+const aluminiRouter = require('./routers/alumini.router');
+// *********************************************************
 // ! app creation
 let app = express();
 
 // ! to convert the javascript object to json if not the result will be undefined.
 app.use(express.json());
 
+// ! serves static file from our server
+app.use(express.static("./public"))
 // *********************************************************
 // ! Student Router
 app.use("/api/student",studentRouter)
@@ -28,6 +32,9 @@ app.use("/api/teacher",teacherRouter)
 //! User Router
 app.use("/api/user",userRouter)
 
+//! Alumini Router
+// app.use("/api/alumini",aluminiRouter)
+app.use("/api/alumini",aluminiRouter)
 // *********************************************************
 //! Page not found middleware
 app.use("*",(req,res,next)=>{

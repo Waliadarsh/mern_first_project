@@ -3,3 +3,6 @@
 
 # dot env
 /.env
+
+# ignore public file
+/public/uploads/
